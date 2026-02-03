@@ -56,19 +56,26 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        var secret = builder.Configuration["Jwt:Secret"]
-            ?? throw new Exception("Jwt:Secret not found");
+        var jwt = builder.Configuration.GetSection("Jwt");
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
+
+            ValidIssuer = jwt["Issuer"],
+            ValidAudience = jwt["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwt["Secret"]!)
+            ),
+
             ClockSkew = TimeSpan.Zero
         };
     });
+
+
 
 builder.Services.AddAuthorization();
 
@@ -118,7 +125,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowVite");
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();

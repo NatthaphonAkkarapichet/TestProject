@@ -134,3 +134,4 @@ D:\TestProject\backend\obj\Debug\net10.0\refint\backend.dll
 D:\TestProject\backend\obj\Debug\net10.0\backend.pdb
 D:\TestProject\backend\obj\Debug\net10.0\backend.genruntimeconfig.cache
 D:\TestProject\backend\obj\Debug\net10.0\ref\backend.dll
+D:\TestProject\backend\obj\Debug\net10.0\backend.sourcelink.json
